@@ -131,12 +131,10 @@ fn test_convert_binary() {
     assert_eq!(t_exp.len(), 32);
     assert_eq!(convert_binary(&t_val), t_exp);
 
-
     let t_val = i32::MAX;
     let t_exp = "01111111111111111111111111111111".to_string();
     assert_eq!(t_exp.len(), 32);
     assert_eq!(convert_binary(&t_val), t_exp);
-
 }
 
 #[test]
