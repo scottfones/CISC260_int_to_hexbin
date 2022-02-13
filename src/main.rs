@@ -1,15 +1,19 @@
 //! CISC 260 - HW 1
 //! Integer to Hexadecimal and Binary
 
+use itertools::Itertools;
 use std::cmp::Ordering::*;
+use std::collections::HashMap;
 use std::io;
 
 fn main() {
     let input = get_input();
     let fmt_bin = convert_binary(&input);
+    let fmt_hex = convert_hex(&fmt_bin);
 
-    println!("Integer: {input}");
-    println!("Binary: {fmt_bin}");
+    println!("Int: {input}");
+    println!("Bin: {fmt_bin}");
+    println!("Hex: {fmt_hex}");
 }
 
 /// Returns a formatted binary String, given an i32.
@@ -20,6 +24,43 @@ fn convert_binary(int: &i32) -> String {
     let raw_bin = pos_int_to_bin(&int.abs()).unwrap();
     let pfmt_bin = pos_fmt_bin(&raw_bin);
     two_comp_fmt_bin(&pfmt_bin, int.is_negative())
+}
+
+/// Returns an 8 digit hexadecimal by parsing the formatted binary
+/// string in chunks of 4. Each chunk is translated to a hex value
+/// via a hashmap.
+fn convert_hex(fmt_bin: &str) -> String {
+    let hex_map = HashMap::from([
+        ("0000", "0"),
+        ("0001", "1"),
+        ("0010", "2"),
+        ("0011", "3"),
+        ("0100", "4"),
+        ("0101", "5"),
+        ("0110", "6"),
+        ("0111", "7"),
+        ("1000", "8"),
+        ("1001", "9"),
+        ("1010", "A"),
+        ("1011", "B"),
+        ("1100", "C"),
+        ("1101", "D"),
+        ("1110", "E"),
+        ("1111", "F"),
+    ]);
+
+    let fmt_hex: String = fmt_bin
+        .chars()
+        .chunks(4)
+        .into_iter()
+        .map(|chunk| {
+            hex_map
+                .get(chunk.collect::<String>().as_str())
+                .unwrap()
+                .to_string()
+        })
+        .collect();
+    fmt_hex
 }
 
 /// Get user input and return as 32-bit integer.
@@ -35,7 +76,7 @@ fn get_input() -> i32 {
 }
 
 /// Formats a truncated binary string to 31-bit by padding zeros.
-fn pos_fmt_bin(raw_bin: &String) -> String {
+fn pos_fmt_bin(raw_bin: &str) -> String {
     match raw_bin.len().cmp(&31) {
         Less => pos_fmt_bin(&format!("0{raw_bin}")),
         Equal => raw_bin.to_string(),
@@ -60,7 +101,7 @@ fn pos_int_to_bin(int: &i32) -> Option<String> {
     }
 }
 
-fn two_comp_fmt_bin(raw_bin: &String, is_neg: bool) -> String {
+fn two_comp_fmt_bin(raw_bin: &str, is_neg: bool) -> String {
     match is_neg {
         false => format!("0{raw_bin}"),
         true => {
@@ -141,37 +182,37 @@ fn test_convert_binary() {
 fn test_pos_fmt_bin() {
     // 0
     assert_eq!(
-        pos_fmt_bin(&"0".to_string()),
+        pos_fmt_bin("0"),
         "0000000000000000000000000000000".to_string()
     );
 
     // 1
     assert_eq!(
-        pos_fmt_bin(&"1".to_string()),
+        pos_fmt_bin("1"),
         "0000000000000000000000000000001".to_string()
     );
 
     // 2
     assert_eq!(
-        pos_fmt_bin(&"10".to_string()),
+        pos_fmt_bin("10"),
         "0000000000000000000000000000010".to_string()
     );
 
     // 7
     assert_eq!(
-        pos_fmt_bin(&"111".to_string()),
+        pos_fmt_bin("111"),
         "0000000000000000000000000000111".to_string()
     );
 
     // 2022
     assert_eq!(
-        pos_fmt_bin(&"11111100110".to_string()),
+        pos_fmt_bin("11111100110"),
         "0000000000000000000011111100110".to_string()
     );
 
     // i32::MAX
     assert_eq!(
-        pos_fmt_bin(&"1111111111111111111111111111111".to_string()),
+        pos_fmt_bin("1111111111111111111111111111111"),
         "1111111111111111111111111111111".to_string()
     );
 }
@@ -195,79 +236,79 @@ fn test_pos_int_to_bin() {
 #[test]
 fn test_two_comp_fmt_bin() {
     // Negative i32::MAX
-    let t_val = "1111111111111111111111111111111".to_string();
+    let t_val = "1111111111111111111111111111111";
     let t_exp = "10000000000000000000000000000000".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, true), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, true), t_exp);
 
     // Negative 2022
-    let t_val = "0000000000000000000011111100110".to_string();
+    let t_val = "0000000000000000000011111100110";
     let t_exp = "11111111111111111111100000011001".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, true), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, true), t_exp);
 
     // Negative 7
-    let t_val = "0000000000000000000000000000111".to_string();
+    let t_val = "0000000000000000000000000000111";
     let t_exp = "11111111111111111111111111111000".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, true), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, true), t_exp);
 
     // Negative 2
-    let t_val = "0000000000000000000000000000010".to_string();
+    let t_val = "0000000000000000000000000000010";
     let t_exp = "11111111111111111111111111111101".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, true), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, true), t_exp);
 
     // Negative 1
-    let t_val = "0000000000000000000000000000001".to_string();
+    let t_val = "0000000000000000000000000000001";
     let t_exp = "11111111111111111111111111111110".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, true), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, true), t_exp);
 
     // 0
-    let t_val = "0000000000000000000000000000000".to_string();
+    let t_val = "0000000000000000000000000000000";
     let t_exp = "00000000000000000000000000000000".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, false), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, false), t_exp);
 
     // 1
-    let t_val = "0000000000000000000000000000001".to_string();
+    let t_val = "0000000000000000000000000000001";
     let t_exp = "00000000000000000000000000000001".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, false), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, false), t_exp);
 
     // 2
-    let t_val = "0000000000000000000000000000010".to_string();
+    let t_val = "0000000000000000000000000000010";
     let t_exp = "00000000000000000000000000000010".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, false), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, false), t_exp);
 
     // 7
-    let t_val = "0000000000000000000000000000111".to_string();
+    let t_val = "0000000000000000000000000000111";
     let t_exp = "00000000000000000000000000000111".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, false), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, false), t_exp);
 
     // 2022
-    let t_val = "0000000000000000000011111100110".to_string();
+    let t_val = "0000000000000000000011111100110";
     let t_exp = "00000000000000000000011111100110".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, false), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, false), t_exp);
 
     // i32::MAX
-    let t_val = "1111111111111111111111111111111".to_string();
+    let t_val = "1111111111111111111111111111111";
     let t_exp = "01111111111111111111111111111111".to_string();
     assert_eq!(t_val.len(), 31);
     assert_eq!(t_exp.len(), 32);
-    assert_eq!(two_comp_fmt_bin(&t_val, false), t_exp);
+    assert_eq!(two_comp_fmt_bin(t_val, false), t_exp);
 }
