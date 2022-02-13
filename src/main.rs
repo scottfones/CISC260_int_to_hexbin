@@ -167,6 +167,33 @@ fn test_convert_binary() {
 }
 
 #[test]
+fn test_convert_hex() {
+    // Note abs(i32::MIN) causes overflow due to abs()
+    // https://doc.rust-lang.org/std/primitive.i32.html#method.abs
+    let vals = [
+        i32::MIN + 1,
+        -266166237,
+        -67841,
+        -7,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        7,
+        67841,
+        266166237,
+        i32::MAX,
+    ];
+
+    for val in vals {
+        let t_val = format!("{val:032b}");
+        let t_exp = format!("{val:08X}");
+        assert_eq!(convert_hex(&t_val), t_exp);
+    }
+}
+
+#[test]
 fn test_pos_fmt_bin() {
     for val in [0, 1, 2, 7, 67841, 266166237, i32::MAX] {
         let t_val = format!("{val:b}");
