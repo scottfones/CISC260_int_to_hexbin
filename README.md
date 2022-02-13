@@ -10,3 +10,17 @@ Write a program in the language of your choice (c ,c++, java, python, etc.) whic
     2. then digits[12] will return ‘C’
 3. You should convert the absolute value to binary first, then take the twos complement if the value is negative, then convert the binary to hexadecimal
 4. You may not use any built in conversion operators or print operators that can do the conversion automatically (i.e. NO printf(‘%x’,number)).
+
+## To Run - Program
+
+1. Install [Rust](https://www.rust-lang.org/learn/get-started)
+2. Clone the repository
+3. `cd` into project directory
+4. `cargo run`
+
+## To Rn - Tests
+
+1. Install [Rust](https://www.rust-lang.org/learn/get-started)
+2. Clone the repository
+3. `cd` into project directory
+4. `cargo test`
