@@ -18,7 +18,7 @@ Write a program in the language of your choice (c ,c++, java, python, etc.) whic
 3. `cd` into project directory
 4. `cargo run` or `cargo run --release`
 
-## To Test
+## To Run Tests
 
 1. Install [Rust](https://www.rust-lang.org/learn/get-started)
 2. Clone the repository
