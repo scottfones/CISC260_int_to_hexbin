@@ -12,8 +12,8 @@ fn main() {
     let fmt_hex = convert_hex(&fmt_bin);
 
     println!("Int: {input}");
-    println!("Bin: {fmt_bin}");
-    println!("Hex: {fmt_hex}");
+    println!("Bin: {fmt_bin}, ({} digits)", fmt_bin.len());
+    println!("Hex: {fmt_hex}, ({} digits)", fmt_hex.len());
 }
 
 /// Returns a formatted binary String, given an i32.
