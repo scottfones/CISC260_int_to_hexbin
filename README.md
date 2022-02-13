@@ -1,4 +1,4 @@
-# CISC 260: HW1 - Integer to 32-bit Hexadecimal and Binary
+# CISC 260: HW1 - Integer to 32-bit Hex and Binary
 
 ## Assignment Write-up
 
@@ -16,7 +16,7 @@ Write a program in the language of your choice (c ,c++, java, python, etc.) whic
 1. Install [Rust](https://www.rust-lang.org/learn/get-started)
 2. Clone the repository
 3. `cd` into project directory
-4. `cargo run`
+4. `cargo run` or `cargo run --release`
 
 ## To Test
 

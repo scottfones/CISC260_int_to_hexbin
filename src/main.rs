@@ -1,4 +1,4 @@
-//! CISC 260 - HW 1
+//! CISC 260 - HW One - Part One
 //! Integer to Hexadecimal and Binary
 
 use itertools::Itertools;
