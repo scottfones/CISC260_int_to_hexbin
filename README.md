@@ -1,4 +1,4 @@
-# CISC 260: HW1 - Integer to 32-bit Hex and Binary
+# CISC 260: HW 1 - Integer to 32-bit Hex and Binary
 
 ## Assignment Write-up
 
