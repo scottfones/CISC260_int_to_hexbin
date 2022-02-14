@@ -2,7 +2,6 @@
 //! Integer to Hexadecimal and Binary
 
 use itertools::Itertools;
-use std::cmp::Ordering::*;
 use std::collections::HashMap;
 use std::io;
 
@@ -83,11 +82,7 @@ fn get_input() -> i32 {
 
 /// Formats a truncated binary `str` to a 32-bit `String` by padding zeros.
 fn pos_fmt_bin(raw_bin: &str) -> String {
-    match raw_bin.len().cmp(&32) {
-        Less => pos_fmt_bin(&format!("0{raw_bin}")),
-        Equal => raw_bin.to_string(),
-        _ => unreachable!(),
-    }
+    format!("{raw_bin:0>32}")
 }
 
 /// Converts a positive, 32-bit integer to a binary `String` representation.
