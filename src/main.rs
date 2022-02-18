@@ -86,19 +86,19 @@ fn pos_fmt_bin(raw_bin: &str) -> String {
 }
 
 /// Converts a positive, 32-bit integer to a binary `String` representation.
-/// If the value is negative, return None.
-fn pos_int_to_bin(int: &i32) -> Option<String> {
+/// If the value is negative, return Err.
+fn pos_int_to_bin(int: &i32) -> Result<String, &'static str> {
     if int.lt(&0) {
-        return None;
+        return Err("Input must be non-negative");
     }
 
     if int.le(&1) {
-        return Some(int.to_string());
+        return Ok(int.to_string());
     }
 
     match int % 2 {
-        0 => Some(pos_int_to_bin(&(int / 2)).unwrap() + "0"),
-        1 => Some(pos_int_to_bin(&(int / 2)).unwrap() + "1"),
+        0 => Ok(pos_int_to_bin(&(int / 2))? + "0"),
+        1 => Ok(pos_int_to_bin(&(int / 2))? + "1"),
         _ => unreachable!(),
     }
 }
@@ -199,12 +199,12 @@ fn test_pos_fmt_bin() {
 
 #[test]
 fn test_pos_int_to_bin() {
-    assert_eq!(pos_int_to_bin(&i32::MIN), None);
-    assert_eq!(pos_int_to_bin(&-1), None);
+    assert!(pos_int_to_bin(&i32::MIN).is_err());
+    assert!(pos_int_to_bin(&-1).is_err());
 
     for t_val in [0, 1, 2, 7, 67841, 266166237, i32::MAX] {
         let t_exp = format!("{t_val:b}");
-        assert_eq!(pos_int_to_bin(&t_val), Some(t_exp));
+        assert_eq!(pos_int_to_bin(&t_val), Ok(t_exp));
     }
 }
 
