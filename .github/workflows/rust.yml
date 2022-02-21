@@ -1,4 +1,4 @@
-name: Multi Build & Test
+name: Multi Env - Build, Clippy, Format, Test
 
 on:
   push:
