@@ -1,5 +1,7 @@
 # CISC 260: HW 1 - Integer to 32-bit Hex and Binary
 
+![rust workflow badge](https://github.com/scottfones/int_to_hexbin/actions/workflows/rust.yml/badge.svg)
+
 ## Assignment Write-up
 
 Write a program in the language of your choice (c ,c++, java, python, etc.) which takes as input an
